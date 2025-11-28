@@ -5,6 +5,7 @@
 ![Static Badge](https://img.shields.io/badge/contribution-closed-ff545d)
 ![Static Badge](https://img.shields.io/badge/code%20style-black-000000)
 ![Static Badge](https://img.shields.io/badge/linting-pylint-96981D)
+[![Discord](https://img.shields.io/discord/1444015032252895275)](https://discord.gg/SgXCAQpTxy)
 
 
 _Introducing No Billing Bomb (NoBBomb)._
