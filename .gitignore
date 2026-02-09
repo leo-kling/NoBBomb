@@ -3,3 +3,7 @@
 **__pycache__
 **.git/
 **.venv
+**.vscode
+**pytest**
+**test_objects.json
+**test_kill_switch.json

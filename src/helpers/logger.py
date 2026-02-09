@@ -2,7 +2,7 @@
 
 import json
 import logging
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any
 
 # pylint: disable=missing-function-docstring
@@ -23,7 +23,7 @@ class GCPLogger:
     def _log(self, level: str, msg: str, **kwargs: Any) -> None:
         log_entry = {
             "message": msg,
-            "time": datetime.utcnow().isoformat() + "Z",
+            "time": datetime.now(UTC).isoformat(),
             **kwargs,
         }
         self.logger.log(getattr(logging, level.upper()), log_entry)
@@ -40,6 +40,9 @@ class GCPLogger:
     def error(self, msg: str, **kwargs: Any) -> None:
         self._log("error", msg, **kwargs)
 
+    def critical(self, msg: str, **kwargs: Any) -> None:
+        self._log("critical", msg, **kwargs)
+
 
 class JSONFormatter(logging.Formatter):
     """Formats log records as JSON."""
@@ -51,5 +54,5 @@ class JSONFormatter(logging.Formatter):
             else {"message": record.getMessage()}
         )
         log_record.setdefault("severity", record.levelname)
-        log_record.setdefault("time", datetime.utcnow().isoformat() + "Z")
+        log_record.setdefault("time", datetime.now(UTC).isoformat())
         return json.dumps(log_record)

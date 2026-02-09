@@ -1,0 +1,20 @@
+[tools]
+docker-cli = "latest"
+gcloud = "latest"
+python = "3.14"
+uv = "latest"
+
+
+[env]
+_.source = { path = "config.sh", tools = true }
+_.python.venv = { path = ".venv", create = true, uv_create_args = ["--seed"] }
+
+
+[settings]
+python.venv_auto_create = true
+python.uv_venv_auto = true
+
+[tasks.build]
+description = "Deploy NoBBomb to your GCP project"
+alias = "deploy"
+run = "bash deploy.sh"
