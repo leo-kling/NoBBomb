@@ -41,4 +41,5 @@ case "$CHOICE" in
 esac
 
 gcloud pubsub topics publish "$PUBSUB_BUDGET_ALERT_TOPIC" \
+        --project="$GCP_PROJECT_ID" \
         --message="$MESSAGE_BODY"

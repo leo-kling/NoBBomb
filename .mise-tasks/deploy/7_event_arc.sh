@@ -11,6 +11,7 @@ gcloud projects add-iam-policy-binding "$GCP_PROJECT_ID" \
     --role="roles/iam.serviceAccountTokenCreator"
 
 gcloud eventarc triggers create "$EVENT_ARC" \
+    --project="$GCP_PROJECT_ID" \
     --location="$DEPLOY_REGION" \
     --service-account="$SERVICE_ACCOUNT_MAIL" \
         --transport-topic="projects/$GCP_PROJECT_ID/topics/$PUBSUB_BUDGET_ALERT_TOPIC" \
