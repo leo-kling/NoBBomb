@@ -7,13 +7,13 @@ source .mise-tasks/utils/colors.sh
 print_color "blue" "Generating Gemini activities..."
 
 # Get the current project ID
-project_id=$(gcloud config get-value project)
+project_id="$GCP_PROJECT_ID"
 location="us-central1"
 access_token=$(gcloud auth print-access-token)
 
-# Filter for Gemini models. 
+# Filter for Gemini models.
 # Note: This list might include embedding models which require a different API payload.
-models=$(gcloud ai model-garden models list --model-filter=gemini --format="value(MODEL_ID,CAN_PREDICT)" | awk '$2=="Yes" {print $1}')
+models=$(gcloud ai model-garden models list --project="$GCP_PROJECT_ID" --model-filter=gemini --format="value(MODEL_ID,CAN_PREDICT)" | awk '$2=="Yes" {print $1}')
 
 print_color "yellow" "Found the following predictable models:"
 echo "$models"
