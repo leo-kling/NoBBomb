@@ -31,10 +31,8 @@ source .mise-tasks/deploy/2_service_account.sh
 # Deploy Cloud Run Service
 source .mise-tasks/deploy/3_cloud_run.sh
 
-# Deploy Cloud Scheduler if Anti Burst Feature is enabled
-if [ "$EXPERIMENTAL_FEATURE" -eq 1 ]; then
-    source .mise-tasks/deploy/4_cloud_scheduler.sh
-fi
+# Deploy Cloud Scheduler
+source .mise-tasks/deploy/4_cloud_scheduler.sh
 
 # Deploy Pub/Sub components (Kill Switch for Budget Alert)
 source .mise-tasks/deploy/5_pub_sub.sh
