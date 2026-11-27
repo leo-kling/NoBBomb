@@ -103,13 +103,13 @@ class CloudBillingWrapper:
                 return price_per_base_unit
         return None
 
-    def disable_billing_for_the_project(self) -> None:
+    def disable_billing_for_the_project(self, project_id: str = PROJECT_ID) -> None:
         """Disable billing for a project by removing its billing account.
 
         Based on: https://docs.cloud.google.com/billing/docs/how-to/disable-billing-with-notifications#create-cloud-run-function
         """
 
-        resource_name = f"projects/{PROJECT_ID}"
+        resource_name = f"projects/{project_id}"
 
         project_billing_info = billing_v1.ProjectBillingInfo(
             billing_account_name=""  # No Billing Account
@@ -126,6 +126,6 @@ class CloudBillingWrapper:
                 self.billing_client.update_project_billing_info(request=request)
             )
             APP_LOGGER.info(msg=f"Disable billing response: {response}")
-            APP_LOGGER.critical(msg=f"Billing disabled for project {PROJECT_ID}.")
+            APP_LOGGER.critical(msg=f"Billing disabled for project {project_id}.")
         except exceptions.PermissionDenied:
             APP_LOGGER.error(msg="Failed to disable billing, check permissions.")

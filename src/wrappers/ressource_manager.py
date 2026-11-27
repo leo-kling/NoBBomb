@@ -11,12 +11,12 @@ class RessourceManagerWrapper:
     def __init__(self) -> None:
         self.ressource_manager_client = resourcemanager_v3.ProjectsClient()
 
-    def shutdown_the_project(self) -> None:
+    def shutdown_the_project(self, project_id: str = PROJECT_ID) -> None:
         """Shut down the Google Cloud project."""
         try:
             # Construct the request
             request = resourcemanager_v3.DeleteProjectRequest(
-                name=f"projects/{PROJECT_ID}"
+                name=f"projects/{project_id}"
             )
 
             shutdown_operation = self.ressource_manager_client.delete_project(
@@ -26,6 +26,6 @@ class RessourceManagerWrapper:
             shutdown_response = shutdown_operation.result()
 
             APP_LOGGER.info(f"Shutdown operation result: {shutdown_response}")
-            APP_LOGGER.critical(f"Project {PROJECT_ID} has been marked for deletion.")
+            APP_LOGGER.critical(f"Project {project_id} has been marked for deletion.")
         except Exception as e:
             APP_LOGGER.error(f"Error during project shutdown: {e}")

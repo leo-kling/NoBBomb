@@ -7,7 +7,7 @@ from typing import Any
 from fastapi import Request
 
 from config.budget import ExpenseLimit, ProjectBudget
-from helpers.constants import APP_LOGGER
+from helpers.constants import APP_LOGGER, KILL_TARGETS, PROJECT_ID
 from services.anti_burst import NobbombAntiBurstService
 from services.kill_switch import KillSwitchService
 from wrappers.cloud_billing import CloudBillingWrapper
@@ -63,6 +63,7 @@ class NobbombCoreService:
             data_json = await request_from_event_arc.json()
             event_json = base64.b64decode(data_json["message"]["data"]).decode("utf-8")
             event_data = json.loads(event_json)
+            budget_name = event_data.get("budgetDisplayName")
             cost_amount = event_data.get("costAmount")
             budget_amount = event_data.get("budgetAmount")
             APP_LOGGER.info(
@@ -79,6 +80,14 @@ class NobbombCoreService:
             APP_LOGGER.error(
                 msg="Cost amount or budget amount is missing in the event data. Cannot determine if kill switch should be triggered."
             )
+            return False
+
+        target_project = KILL_TARGETS.get(budget_name) if KILL_TARGETS else PROJECT_ID
+        if target_project is None:
+            APP_LOGGER.warning(
+                msg=f"Budget '{budget_name}' is not in KILL_TARGETS. Ignoring it."
+            )
+            return False
 
         # Budget Not Reached
         if cost_amount < budget_amount:
@@ -94,6 +103,6 @@ class NobbombCoreService:
             do_trigger_kill_switch = True
 
         if do_trigger_kill_switch:
-            self.kill_switch_service.activate()
+            self.kill_switch_service.activate(target_project)
             return True
         return False
