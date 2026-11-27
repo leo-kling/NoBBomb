@@ -52,5 +52,4 @@ async def kill_switch(
         APP_LOGGER.info(msg="Budget Alert not reached. Kill switch not triggered.")
     else:
         APP_LOGGER.critical(msg="Kill switch triggered. Budget Alert reached.")
-        nobbomb_core_service.kill_switch_service.activate()
     return Response(status_code=200)

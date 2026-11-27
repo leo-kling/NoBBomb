@@ -1,6 +1,6 @@
 """Kill Switch Service Module."""
 
-from helpers.constants import ACTION_ON_BUDGET_REACHED, APP_LOGGER
+from helpers.constants import ACTION_ON_BUDGET_REACHED, APP_LOGGER, PROJECT_ID
 from wrappers.cloud_billing import CloudBillingWrapper
 from wrappers.ressource_manager import RessourceManagerWrapper
 
@@ -28,35 +28,35 @@ class KillSwitchService:
             msg=f"KillSwitchService initialized - Mode : {self.action_on_budget_reached}"
         )
 
-    def activate(self) -> None:
+    def activate(self, project_id: str = PROJECT_ID) -> None:
         """
         Execute the Kill Switch action based on the configured mode.
         """
         match self.action_on_budget_reached:
             case "DISABLE_BILLING":
-                self.disable_billing_project()
+                self.disable_billing_project(project_id)
             case "SHUTDOWN":
-                self.shutdown_project()
+                self.shutdown_project(project_id)
             case "NONE":
                 self.none()
             case _:
                 pass
 
-    def disable_billing_project(self) -> None:
+    def disable_billing_project(self, project_id: str = PROJECT_ID) -> None:
         """
         Disable billing for the GCP Project.
 
         SEE: https://docs.cloud.google.com/billing/docs/how-to/modify-project#disable_billing_for_a_project
         """
-        self.cloud_billing_wrapper.disable_billing_for_the_project()
+        self.cloud_billing_wrapper.disable_billing_for_the_project(project_id)
 
-    def shutdown_project(self) -> None:
+    def shutdown_project(self, project_id: str = PROJECT_ID) -> None:
         """
         Shutdown the GCP Project.
 
         SEE: https://docs.cloud.google.com/resource-manager/docs/creating-managing-projects#shutting_down_projects
         """
-        self.ressource_manager_wrapper.shutdown_the_project()
+        self.ressource_manager_wrapper.shutdown_the_project(project_id)
 
     def none(self) -> None:
         """

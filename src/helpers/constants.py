@@ -1,5 +1,6 @@
 """Manage all constants / shared ressources."""
 
+import json
 import os
 from typing import Any
 
@@ -16,6 +17,10 @@ APP_LOGGER.info(msg="Debugger Up&Ready!")
 # GCP Project ID (name) | Raise if not set
 PROJECT_ID = os.environ["GCP_PROJECT_ID"]
 APP_LOGGER.debug(msg=f"GCP Project ID: {PROJECT_ID}")
+
+# Budget display name -> project to kill, e.g. '{"my-budget": "my-project"}'.
+# Empty: every budget alert targets PROJECT_ID. Set: budgets not listed are ignored.
+KILL_TARGETS: dict[str, str] = json.loads(os.environ.get("KILL_TARGETS", "{}"))
 
 # Budget Constants
 monthly_budget_amount = os.environ.get("MONTHLY_BUDGET_AMOUNT")
